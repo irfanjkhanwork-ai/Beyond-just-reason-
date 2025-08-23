@@ -2,7 +2,6 @@
 
 **A Novel Approach to Artificial General Intelligence via Large Intuitive Models (LIMs)**
 
-[ [ [
 
 ***
 
