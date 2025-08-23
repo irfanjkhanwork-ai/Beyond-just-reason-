@@ -109,4 +109,4 @@ New Horizon AI is a decision intelligence company focused on creating AI that ge
 *"The future of AI lies not in bigger models, but in models that genuinely reason."*
 
 Citations:
-[1] Beyond-just-_attention_-A-road-to-AGI-3.pdf https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/26912769/9ab3c396-74a5-4be2-9a22-1176988bdc29/Beyond-just-_attention_-A-road-to-AGI-3.pdf
+[1] Beyond-just-_attention_-A-road-to-AGI
