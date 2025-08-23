@@ -1,1 +1,82 @@
-
+import json  
+  
+# ---- CONFIG ----  
+SAVE_PATH = "tps3_dataset.jsonl"  # output file  
+  
+# ---- TEMPLATE FUNCTION ----  
+def create_entry(entry_id, domain, scenario,   
+                 thesis, antithesis, synthesis,  
+                 attempt, reflection, correction, valid=True):  
+    """  
+    Create a TPS3 dual reasoning entry (Hegelian + TRB).  
+    If valid=False, TRB will backtrack and fix the attempt.  
+    If valid=True, TRB reflection improves the attempt.  
+    """  
+      
+    trb_output = {  
+        "try": attempt,  
+        "reflect": None,  
+        "synthesis": None  
+    }  
+  
+    if valid:  
+        trb_output["reflect"] = f"Reflection shows attempt is valid but improvable: {reflection}"  
+        trb_output["synthesis"] = f"Improved plan: {correction}"  
+    else:  
+        trb_output["reflect"] = f"Reflection shows attempt is invalid."  
+        trb_output["synthesis"] = f"Backtrack: {correction}"  
+  
+    entry = {  
+        "id": entry_id,  
+        "domain": domain,  
+        "scenario": scenario,  
+        "hegelian": {  
+            "thesis": thesis,  
+            "antithesis": antithesis,  
+            "synthesis": synthesis  
+        },  
+        "trb": trb_output  
+    }  
+    return entry  
+  
+  
+# ---- SAVE FUNCTION ----  
+def save_entry(entry, path=SAVE_PATH):  
+    """Append a JSON object to JSONL file."""  
+    with open(path, "a", encoding="utf-8") as f:  
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")  
+  
+  
+# ---- EXAMPLE USAGE ----  
+if __name__ == "__main__":  
+    # Example 1: Invalid attempt (forces backtrack)  
+    entry1 = create_entry(  
+        entry_id=1,  
+        domain="algorithms",  
+        scenario="Tower of Hanoi with 4 disks",  
+        thesis="Move largest disk first to speed up.",  
+        antithesis="This blocks smaller disks.",  
+        synthesis="Move smaller disks first, then largest.",  
+        attempt="Move disk 4 directly from A to C.",  
+        reflection="Illegal because smaller disks are on top.",  
+        correction="Backtrack and move n-1 to B, then disk 4, then n-1 to C.",  
+        valid=False  
+    )  
+    save_entry(entry1)  
+  
+    # Example 2: Valid attempt (improve instead of backtrack)  
+    entry2 = create_entry(  
+        entry_id=2,  
+        domain="physics",  
+        scenario="Explaining free fall",  
+        thesis="Heavier objects fall faster.",  
+        antithesis="In vacuum, all masses fall equally.",  
+        synthesis="Air resistance explains differences.",  
+        attempt="Drop rock and ball in vacuum.",  
+        reflection="Correct but explanation lacks clarity.",  
+        correction="Explicitly mention gravity accelerates all objects equally at g.",  
+        valid=True  
+    )  
+    save_entry(entry2)  
+  
+    print(f"Entries saved to {SAVE_PATH}")
